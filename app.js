@@ -5,6 +5,7 @@ var app = Vue.createApp({
       q: 0,
       a: ['', '', '', ''],
       tr: ['', '', '', ''],
+      scene: '',
       ts: { on: false, txt: '' },
       rec: {
         show: false,
@@ -58,6 +59,7 @@ var app = Vue.createApp({
     restart: function() {
       this.a = ['', '', '', ''];
       this.tr = ['', '', '', ''];
+      this.scene = '';
       this.screen = 'welcome';
       this.q = 0;
       this._cleanup();
