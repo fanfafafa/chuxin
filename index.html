@@ -1,860 +1,180 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover"/>
-  <title>初心</title>
-  <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400&display=swap');
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    :root {
-      --cream: #F5E6D3;
-      --pink: #E8C4B8;
-      --pink-light: #F3DDD6;
-      --warm-brown: #8B6F5E;
-      --text-dark: #4A3728;
-      --text-light: #7A6255;
-      --accent: #C4846A;
-    }
-
-    html, body { height: 100%; overflow: hidden; }
-
-    body {
-      font-family: 'Noto Sans SC', sans-serif;
-      background: linear-gradient(160deg, #F5E6D3 0%, #F3DDD6 50%, #EDD9C4 100%);
-      color: var(--text-dark);
-      overscroll-behavior: none;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    /* Decorative background */
-    .bg-decor {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 0;
-    }
-    .bg-circle { position: absolute; border-radius: 50%; opacity: 0.12; }
-    .bg-1 { width: 320px; height: 320px; background: #E8C4B8; top: -100px; right: -100px; }
-    .bg-2 { width: 200px; height: 200px; background: #C4846A; bottom: 5%; left: -70px; }
-    .bg-3 { width: 140px; height: 140px; background: #E8C4B8; bottom: -50px; right: 15%; }
-
-    #app {
-      position: relative;
-      z-index: 1;
-      height: 100dvh;
-      height: 100vh;
-      overflow: hidden;
-    }
-
-    /* ===== Screens ===== */
-    .screen {
-      position: absolute;
-      inset: 0;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: env(safe-area-inset-top, 20px) 28px env(safe-area-inset-bottom, 20px);
-      overflow: hidden;
-    }
-
-    /* Slide transitions */
-    .slide-enter-active { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
-    .slide-leave-active { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); position:absolute; width:100%; }
-    .slide-enter-from { opacity: 0; transform: translateX(60px); }
-    .slide-leave-to   { opacity: 0; transform: translateX(-40px); }
-
-    /* ===== Welcome ===== */
-    .welcome-title {
-      font-family: 'Noto Serif SC', serif;
-      font-size: 3.5rem;
-      font-weight: 600;
-      letter-spacing: 14px;
-      margin-bottom: 6px;
-      animation: breathe 4s ease infinite;
-    }
-    @keyframes breathe {
-      0%, 100% { transform: scale(1); }
-      50% { transform: scale(1.03); }
-    }
-    .welcome-sub {
-      font-family: 'Noto Serif SC', serif;
-      font-size: 0.8rem;
-      color: var(--text-light);
-      letter-spacing: 5px;
-      margin-bottom: 44px;
-    }
-    .welcome-desc {
-      font-size: 0.92rem;
-      color: var(--text-light);
-      line-height: 2.1;
-      text-align: center;
-      max-width: 260px;
-      margin-bottom: 52px;
-      font-weight: 300;
-    }
-    .btn-primary {
-      background: var(--warm-brown);
-      color: #fff;
-      border: none;
-      border-radius: 40px;
-      padding: 18px 56px;
-      font-size: 1rem;
-      font-family: 'Noto Serif SC', serif;
-      letter-spacing: 5px;
-      cursor: pointer;
-      box-shadow: 0 6px 24px rgba(139,111,94,0.28);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .btn-primary:active { transform: scale(0.96); box-shadow: 0 3px 12px rgba(139,111,94,0.2); }
-
-    /* ===== Question ===== */
-    .q-wrapper {
-      width: 100%;
-      max-width: 380px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex: 1;
-      justify-content: center;
-      padding: 16px 0;
-    }
-    .progress-dots {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 28px;
-    }
-    .dot {
-      width: 6px; height: 6px;
-      border-radius: 3px;
-      background: rgba(139,111,94,0.2);
-      transition: all 0.35s;
-    }
-    .dot.done { background: rgba(139,111,94,0.45); width: 6px; border-radius: 3px; }
-    .dot.active { background: var(--accent); width: 22px; border-radius: 3px; }
-
-    .q-number {
-      font-size: 0.68rem;
-      color: var(--accent);
-      letter-spacing: 3px;
-      margin-bottom: 14px;
-    }
-    .q-text {
-      font-family: 'Noto Serif SC', serif;
-      font-size: 1.45rem;
-      font-weight: 500;
-      text-align: center;
-      line-height: 1.8;
-      margin-bottom: 8px;
-    }
-    .q-hint {
-      font-size: 0.78rem;
-      color: var(--text-light);
-      margin-bottom: 28px;
-      font-weight: 300;
-    }
-
-    /* ===== Text Input ===== */
-    .input-area {
-      width: 100%;
-      margin-bottom: 20px;
-    }
-    .text-input {
-      width: 100%;
-      background: rgba(255,255,255,0.55);
-      border: 1.5px solid rgba(196,132,106,0.2);
-      border-radius: 18px;
-      padding: 16px 18px;
-      font-size: 1rem;
-      font-family: 'Noto Sans SC', sans-serif;
-      color: var(--text-dark);
-      resize: none;
-      outline: none;
-      transition: border-color 0.3s;
-      min-height: 110px;
-      max-height: 160px;
-      line-height: 1.85;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .text-input:focus { border-color: rgba(196,132,106,0.45); }
-    .text-input::placeholder { color: #b09a8e; }
-
-    /* ===== Voice Button ===== */
-    .voice-area {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 24px;
-    }
-    .voice-hint-text {
-      font-size: 0.72rem;
-      color: var(--text-light);
-    }
-    .voice-btn {
-      width: 72px;
-      height: 72px;
-      border-radius: 50%;
-      border: 2.5px solid var(--accent);
-      background: rgba(255,255,255,0.45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
-      -webkit-user-select: none;
-      user-select: none;
-    }
-    .voice-btn svg { width: 28px; height: 28px; color: var(--accent); transition: color 0.2s; }
-
-    /* Recording state */
-    .voice-btn.recording {
-      background: var(--accent);
-      border-color: var(--accent);
-      transform: scale(0.95);
-      box-shadow: 0 0 0 8px rgba(196,132,106,0.2);
-    }
-    .voice-btn.recording svg { color: #fff; }
-
-    /* Pulse ring animation */
-    .voice-btn.recording::before {
-      content: '';
-      position: absolute;
-      inset: -4px;
-      border-radius: 50%;
-      border: 2px solid var(--accent);
-      animation: voice-pulse 1.4s ease-out infinite;
-    }
-    @keyframes voice-pulse {
-      0% { transform: scale(1); opacity: 0.8; }
-      100% { transform: scale(1.5); opacity: 0; }
-    }
-
-    /* Voice tip */
-    .voice-tip {
-      font-size: 0.7rem;
-      color: var(--text-light);
-      opacity: 0.7;
-    }
-
-    /* Transcript display */
-    .transcript {
-      width: 100%;
-      background: rgba(255,255,255,0.4);
-      border-radius: 12px;
-      padding: 12px 16px;
-      font-size: 0.88rem;
-      min-height: 44px;
-      max-height: 80px;
-      overflow-y: auto;
-      line-height: 1.7;
-      margin-bottom: 12px;
-      -webkit-overflow-scrolling: touch;
-      animation: fadeIn 0.25s;
-    }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-    /* Next button */
-    .btn-next {
-      background: var(--warm-brown);
-      color: #fff;
-      border: none;
-      border-radius: 40px;
-      padding: 16px 52px;
-      font-size: 0.95rem;
-      font-family: 'Noto Serif SC', serif;
-      letter-spacing: 4px;
-      cursor: pointer;
-      box-shadow: 0 4px 18px rgba(139,111,94,0.22);
-      transition: all 0.2s;
-      opacity: 0.4;
-      pointer-events: none;
-    }
-    .btn-next.enabled { opacity: 1; pointer-events: auto; }
-    .btn-next.enabled:active { transform: scale(0.96); }
-
-    /* ===== Result Screen ===== */
-    .result-inner {
-      width: 100%;
-      max-width: 380px;
-      flex: 1;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      padding: 8px 0 24px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .result-title {
-      font-family: 'Noto Serif SC', serif;
-      font-size: 1.5rem;
-      letter-spacing: 6px;
-      margin-bottom: 4px;
-    }
-    .result-sub {
-      font-size: 0.72rem;
-      color: var(--text-light);
-      letter-spacing: 2px;
-      margin-bottom: 20px;
-    }
-    .result-card {
-      width: 100%;
-      background: rgba(255,255,255,0.5);
-      border-radius: 22px;
-      padding: 24px 20px;
-      box-shadow: 0 4px 24px rgba(139,111,94,0.08);
-      margin-bottom: 16px;
-    }
-    .result-item { margin-bottom: 22px; }
-    .result-item:last-child { margin-bottom: 0; }
-    .result-label {
-      font-size: 0.65rem;
-      color: var(--accent);
-      letter-spacing: 2px;
-      margin-bottom: 5px;
-    }
-    .result-q {
-      font-size: 0.78rem;
-      color: var(--text-light);
-      margin-bottom: 6px;
-    }
-    .result-a {
-      font-family: 'Noto Serif SC', serif;
-      font-size: 1rem;
-      line-height: 1.85;
-      font-weight: 500;
-    }
-    .result-divider {
-      border: none;
-      border-top: 1px solid rgba(139,111,94,0.1);
-      margin: 20px 0;
-    }
-    .result-summary {
-      width: 100%;
-      background: rgba(196,132,106,0.07);
-      border-radius: 16px;
-      padding: 18px 16px;
-      text-align: center;
-      margin-bottom: 16px;
-    }
-    .summary-label {
-      font-size: 0.65rem;
-      color: var(--accent);
-      letter-spacing: 2px;
-      margin-bottom: 8px;
-    }
-    .summary-text {
-      font-family: 'Noto Serif SC', serif;
-      font-size: 0.95rem;
-      line-height: 1.85;
-      font-weight: 500;
-    }
-    .action-btns {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      width: 100%;
-      max-width: 280px;
-    }
-    .btn-share {
-      background: var(--warm-brown);
-      color: #fff;
-      border: none;
-      border-radius: 40px;
-      padding: 16px 0;
-      font-size: 0.9rem;
-      font-family: 'Noto Serif SC', serif;
-      letter-spacing: 3px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      box-shadow: 0 4px 16px rgba(139,111,94,0.22);
-      transition: transform 0.15s;
-    }
-    .btn-share:active { transform: scale(0.97); }
-    .btn-restart {
-      background: transparent;
-      color: var(--text-light);
-      border: 1.5px solid rgba(139,111,94,0.25);
-      border-radius: 40px;
-      padding: 14px 0;
-      font-size: 0.85rem;
-      font-family: 'Noto Serif SC', serif;
-      letter-spacing: 2px;
-      cursor: pointer;
-      transition: background 0.2s;
-    }
-    .btn-restart:active { background: rgba(139,111,94,0.05); }
-
-    /* Share Canvas */
-    #shareCanvas { display: none; }
-
-    /* Toast */
-    .toast {
-      position: fixed;
-      bottom: 60px;
-      left: 50%;
-      transform: translateX(-50%) translateY(10px);
-      background: rgba(74,55,40,0.9);
-      color: #fff;
-      padding: 12px 24px;
-      border-radius: 24px;
-      font-size: 0.85rem;
-      opacity: 0;
-      transition: all 0.3s;
-      pointer-events: none;
-      z-index: 999;
-      backdrop-filter: blur(8px);
-    }
-    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-    /* Scrollbar hidden */
-    .text-input::-webkit-scrollbar,
-    .transcript::-webkit-scrollbar,
-    .result-inner::-webkit-scrollbar { display: none; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
+<title>初心</title>
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--cream:#F5E6D3;--pink:#E8C4B8;--warm:#8B6F5E;--text:#4A3728;--light:#7A6255;--accent:#C4846A}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5E6D3,#F3DDD6,#EDD9C4);color:var(--text);-webkit-tap-highlight-color:transparent}
+.bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg>div{position:absolute;border-radius:50%;opacity:0.12}
+.bg>div:nth-child(1){width:320px;height:320px;background:#E8C4B8;top:-100px;right:-100px}
+.bg>div:nth-child(2){width:200px;height:200px;background:#C4846A;bottom:5%;left:-70px}
+.bg>div:nth-child(3){width:140px;height:140px;background:#E8C4B8;bottom:-50px;right:15%}
+#app{position:relative;z-index:1;height:100dvh;overflow:hidden}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 28px}
+.ptitle{font-family:'Noto Serif SC',serif;font-size:3.5rem;font-weight:600;letter-spacing:14px;margin-bottom:6px;animation:breathe 4s ease infinite}
+@keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+.psub{font-family:'Noto Serif SC',serif;font-size:.8rem;color:var(--light);letter-spacing:5px;margin-bottom:44px}
+.pdesc{font-size:.92rem;color:var(--light);line-height:2.1;text-align:center;max-width:260px;margin-bottom:52px;font-weight:300}
+.btn{background:var(--warm);color:#fff;border:none;border-radius:40px;padding:18px 56px;font-family:'Noto Serif SC',serif;letter-spacing:5px;font-size:1rem;cursor:pointer;box-shadow:0 6px 24px rgba(139,111,94,.28);transition:transform .15s}
+.btn:active{transform:scale(.96)}
+.pdots{display:flex;gap:8px;margin-bottom:28px}
+.dot{width:6px;height:6px;border-radius:3px;background:rgba(139,111,94,.2);transition:all .35s}
+.dot.done{background:rgba(139,111,94,.45)}
+.dot.active{background:var(--accent);width:22px;border-radius:3px}
+.qwrap{width:100%;max-width:380px;display:flex;flex-direction:column;align-items:center;flex:1;justify-content:center;padding:16px 0}
+.qnum{font-size:.68rem;color:var(--accent);letter-spacing:3px;margin-bottom:14px}
+.qtext{font-family:'Noto Serif SC',serif;font-size:1.45rem;font-weight:500;text-align:center;line-height:1.8;margin-bottom:8px}
+.qhint{font-size:.78rem;color:var(--light);margin-bottom:28px;font-weight:300}
+.tarea{width:100%;margin-bottom:20px}
+.tinput{width:100%;background:rgba(255,255,255,.55);border:1.5px solid rgba(196,132,106,.2);border-radius:18px;padding:16px 18px;font-size:1rem;font-family:'Noto Sans SC',sans-serif;color:var(--text);resize:none;outline:none;min-height:110px;max-height:160px;line-height:1.85;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.tinput:focus{border-color:rgba(196,132,106,.45)}
+.tinput::placeholder{color:#b09a8e}
+.tinput::-webkit-scrollbar,.trans::-webkit-scrollbar,.ri::-webkit-scrollbar{display:none}
+.vrow{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:24px}
+.vhint{font-size:.78rem;color:var(--light)}
+.vbtn{width:72px;height:72px;border-radius:50%;border:2.5px solid var(--accent);background:rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;-webkit-user-select:none;user-select:none;position:relative}
+.vbtn svg{width:28px;height:28px;color:var(--accent);transition:color .2s}
+.vbtn.rec{background:var(--accent);border-color:var(--accent);transform:scale(.95);box-shadow:0 0 0 8px rgba(196,132,106,.2)}
+.vbtn.rec svg{color:#fff}
+.vbtn.rec::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--accent);animation:vpulse 1.4s ease-out infinite}
+@keyframes vpulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.5);opacity:0}}
+.trans{width:100%;background:rgba(255,255,255,.4);border-radius:12px;padding:12px 16px;font-size:.88rem;min-height:44px;max-height:80px;overflow:hidden;line-height:1.7;margin-bottom:12px;animation:fadein .25s;word-break:break-all}
+@keyframes fadein{from{opacity:0}to{opacity:1}}
+.btn2{background:var(--warm);color:#fff;border:none;border-radius:40px;padding:16px 52px;font-family:'Noto Serif SC',serif;letter-spacing:4px;font-size:.95rem;cursor:pointer;box-shadow:0 4px 18px rgba(139,111,94,.22);transition:all .2s;opacity:.4;pointer-events:none}
+.btn2.on{opacity:1;pointer-events:auto}
+.btn2.on:active{transform:scale(.96)}
+.ri{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;width:100%;max-width:380px;padding:8px 0 24px;display:flex;flex-direction:column;align-items:center}
+.rtitle{font-family:'Noto Serif SC',serif;font-size:1.5rem;letter-spacing:6px;margin-bottom:4px}
+.rsub{font-size:.72rem;color:var(--light);letter-spacing:2px;margin-bottom:20px}
+.rcard{width:100%;background:rgba(255,255,255,.5);border-radius:22px;padding:24px 20px;box-shadow:0 4px 24px rgba(139,111,94,.08);margin-bottom:16px}
+.ritem{margin-bottom:22px}
+.ritem:last-child{margin-bottom:0}
+.rlab{font-size:.65rem;color:var(--accent);letter-spacing:2px;margin-bottom:5px}
+.rq{font-size:.78rem;color:var(--light);margin-bottom:6px}
+.ra{font-family:'Noto Serif SC',serif;font-size:1rem;line-height:1.85;font-weight:500}
+.rdiv{border:none;border-top:1px solid rgba(139,111,94,.1);margin:20px 0}
+.rsum{width:100%;background:rgba(196,132,106,.07);border-radius:16px;padding:18px 16px;text-align:center;margin-bottom:16px}
+.slabel{font-size:.65rem;color:var(--accent);letter-spacing:2px;margin-bottom:8px}
+.stext{font-family:'Noto Serif SC',serif;font-size:.95rem;line-height:1.85;font-weight:500}
+.abtns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:280px}
+.sbtn{background:var(--warm);color:#fff;border:none;border-radius:40px;padding:16px 0;font-family:'Noto Serif SC',serif;letter-spacing:3px;font-size:.9rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 4px 16px rgba(139,111,94,.22);transition:transform .15s}
+.sbtn:active{transform:scale(.97)}
+.rbtn{background:transparent;color:var(--light);border:1.5px solid rgba(139,111,94,.25);border-radius:40px;padding:14px 0;font-family:'Noto Serif SC',serif;letter-spacing:2px;font-size:.85rem;cursor:pointer;transition:background .2s}
+.rbtn:active{background:rgba(139,111,94,.05)}
+#c{display:none}
+.toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(74,55,40,.9);color:#fff;padding:12px 24px;border-radius:24px;font-size:.85rem;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+</style>
 </head>
 <body>
-
-<div class="bg-decor">
-  <div class="bg-circle bg-1"></div>
-  <div class="bg-circle bg-2"></div>
-  <div class="bg-circle bg-3"></div>
-</div>
-
+<div class="bg"><div></div><div></div><div></div></div>
 <div id="app">
-
-  <!-- Screen: Welcome -->
-  <transition name="slide">
-    <div class="screen" v-if="screen==='welcome'">
-      <div class="welcome-title">初心</div>
-      <div class="welcome-sub">回到最初的心意</div>
-      <div class="welcome-desc">
-        在争吵之后，在愤怒消退之后，<br>
-        轻轻地问自己三个问题。<br>
-        答案会带你回到，<br>
-        最初的那份在乎。
-      </div>
-      <button class="btn-primary" @click="start">开始探索</button>
-    </div>
-  </transition>
-
-  <!-- Screen: Q1 -->
-  <transition name="slide">
-    <div class="screen" v-if="screen==='q1'">
-      <div class="q-wrapper">
-        <div class="progress-dots">
-          <div class="dot" :class="{done:currentQ>0, active:currentQ===0}"></div>
-          <div class="dot" :class="{done:currentQ>1, active:currentQ===1}"></div>
-          <div class="dot" :class="{done:currentQ>2, active:currentQ===2}"></div>
-          <div class="dot" :class="{done:currentQ>3, active:currentQ===3}"></div>
-        </div>
-        <div class="q-number">问题 一</div>
-        <div class="q-text">你希望实现什么目的？</div>
-        <div class="q-hint">在这一刻，你真正想要的是什么？</div>
-        <div class="input-area">
-          <textarea class="text-input" v-model="answers[0]" placeholder="轻轻写下你的答案…" @input="checkDone(0)"></textarea>
-        </div>
-        <div class="voice-area">
-          <div class="voice-btn" :class="{recording:recording[0]}"
-            @touchstart.prevent="startVoice(0)"
-            @touchend.prevent="stopVoice(0)"
-            @mousedown="startVoice(0)"
-            @mouseup="stopVoice(0)"
-            @mouseleave="recording[0]&&stopVoice(0)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/>
-              <path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="voice-hint-text">{{ recording[0] ? '松手结束录音' : '长按说话' }}</div>
-        </div>
-        <div class="transcript" v-if="transcripts[0]">{{ transcripts[0] }}</div>
-        <button class="btn-next" :class="{enabled:answers[0].trim()}" @click="next(0)">继续</button>
-      </div>
-    </div>
-  </transition>
-
-  <!-- Screen: Q2 -->
-  <transition name="slide">
-    <div class="screen" v-if="screen==='q2'">
-      <div class="q-wrapper">
-        <div class="progress-dots">
-          <div class="dot done"></div>
-          <div class="dot" :class="{active:currentQ===1}"></div>
-          <div class="dot"></div>
-          <div class="dot"></div>
-        </div>
-        <div class="q-number">问题 二</div>
-        <div class="q-text">你希望对方实现什么目的？</div>
-        <div class="q-hint">在对方身上，你真正期待的是什么？</div>
-        <div class="input-area">
-          <textarea class="text-input" v-model="answers[1]" placeholder="轻轻写下你的答案…" @input="checkDone(1)"></textarea>
-        </div>
-        <div class="voice-area">
-          <div class="voice-btn" :class="{recording:recording[1]}"
-            @touchstart.prevent="startVoice(1)"
-            @touchend.prevent="stopVoice(1)"
-            @mousedown="startVoice(1)"
-            @mouseup="stopVoice(1)"
-            @mouseleave="recording[1]&&stopVoice(1)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/>
-              <path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="voice-hint-text">{{ recording[1] ? '松手结束录音' : '长按说话' }}</div>
-        </div>
-        <div class="transcript" v-if="transcripts[1]">{{ transcripts[1] }}</div>
-        <button class="btn-next" :class="{enabled:answers[1].trim()}" @click="next(1)">继续</button>
-      </div>
-    </div>
-  </transition>
-
-  <!-- Screen: Q3 -->
-  <transition name="slide">
-    <div class="screen" v-if="screen==='q3'">
-      <div class="q-wrapper">
-        <div class="progress-dots">
-          <div class="dot done"></div>
-          <div class="dot done"></div>
-          <div class="dot" :class="{active:currentQ===2}"></div>
-          <div class="dot"></div>
-        </div>
-        <div class="q-number">问题 三</div>
-        <div class="q-text">你希望你们的关系<br>实现什么目的？</div>
-        <div class="q-hint">对于这段关系，你希望它走向哪里？</div>
-        <div class="input-area">
-          <textarea class="text-input" v-model="answers[2]" placeholder="轻轻写下你的答案…" @input="checkDone(2)"></textarea>
-        </div>
-        <div class="voice-area">
-          <div class="voice-btn" :class="{recording:recording[2]}"
-            @touchstart.prevent="startVoice(2)"
-            @touchend.prevent="stopVoice(2)"
-            @mousedown="startVoice(2)"
-            @mouseup="stopVoice(2)"
-            @mouseleave="recording[2]&&stopVoice(2)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/>
-              <path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="voice-hint-text">{{ recording[2] ? '松手结束录音' : '长按说话' }}</div>
-        </div>
-        <div class="transcript" v-if="transcripts[2]">{{ transcripts[2] }}</div>
-        <button class="btn-next" :class="{enabled:answers[2].trim()}" @click="next(2)">继续</button>
-      </div>
-    </div>
-  </transition>
-
-  <!-- Screen: QFinal -->
-  <transition name="slide">
-    <div class="screen" v-if="screen==='qfinal'">
-      <div class="q-wrapper">
-        <div class="progress-dots">
-          <div class="dot done"></div>
-          <div class="dot done"></div>
-          <div class="dot done"></div>
-          <div class="dot" :class="{active:currentQ===3}"></div>
-        </div>
-        <div class="q-number">最后的问题</div>
-        <div class="q-text" style="font-size:1.3rem">要想实现这些，<br>你需要怎么做？</div>
-        <div class="q-hint">回到内心，诚实地回答</div>
-        <div class="input-area">
-          <textarea class="text-input" v-model="answers[3]" placeholder="轻轻写下你的答案…" @input="checkDone(3)"></textarea>
-        </div>
-        <div class="voice-area">
-          <div class="voice-btn" :class="{recording:recording[3]}"
-            @touchstart.prevent="startVoice(3)"
-            @touchend.prevent="stopVoice(3)"
-            @mousedown="startVoice(3)"
-            @mouseup="stopVoice(3)"
-            @mouseleave="recording[3]&&stopVoice(3)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-              <path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/>
-              <path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div class="voice-hint-text">{{ recording[3] ? '松手结束录音' : '长按说话' }}</div>
-        </div>
-        <div class="transcript" v-if="transcripts[3]">{{ transcripts[3] }}</div>
-        <button class="btn-next" :class="{enabled:answers[3].trim()}" @click="showResult">查看答案</button>
-      </div>
-    </div>
-  </transition>
-
-  <!-- Screen: Result -->
-  <transition name="slide">
-    <div class="screen" v-if="screen==='result'">
-      <div class="result-inner">
-        <div class="result-title">初心</div>
-        <div class="result-sub">你的四个答案</div>
-
-        <div class="result-card">
-          <div class="result-item">
-            <div class="result-label">问题一</div>
-            <div class="result-q">你希望实现什么目的？</div>
-            <div class="result-a">{{ answers[0] }}</div>
-          </div>
-          <hr class="result-divider">
-          <div class="result-item">
-            <div class="result-label">问题二</div>
-            <div class="result-q">你希望对方实现什么目的？</div>
-            <div class="result-a">{{ answers[1] }}</div>
-          </div>
-          <hr class="result-divider">
-          <div class="result-item">
-            <div class="result-label">问题三</div>
-            <div class="result-q">你希望你们的关系实现什么目的？</div>
-            <div class="result-a">{{ answers[2] }}</div>
-          </div>
-          <hr class="result-divider">
-          <div class="result-item">
-            <div class="result-label">最后的答案</div>
-            <div class="result-q">要想实现这些，你需要怎么做？</div>
-            <div class="result-a">{{ answers[3] }}</div>
-          </div>
-        </div>
-
-        <div class="result-summary">
-          <div class="summary-label">—— 回到初心 ——</div>
-          <div class="summary-text">{{ summaryText }}</div>
-        </div>
-
-        <div class="action-btns">
-          <button class="btn-share" @click="generateShare">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
-              <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
-              <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
-            </svg>
-            生成分享图
-          </button>
-          <button class="btn-restart" @click="restart">重新开始</button>
-        </div>
-      </div>
-    </div>
-  </transition>
-
+<div class="screen" v-if="screen==='welcome'">
+<div class="ptitle">初心</div>
+<div class="psub">回到最初的心意</div>
+<div class="pdesc">在争吵之后，在愤怒消退之后，<br>轻轻地问自己三个问题。<br>答案会带你回到，<br>最初的那份在乎。</div>
+<button class="btn" @click="go('q1',0)">开始探索</button>
 </div>
-
-<canvas id="shareCanvas" width="540" height="960"></canvas>
-
-<div class="toast" :class="{show: toast.show}">{{ toast.text }}</div>
-
+<div class="screen" v-if="screen==='q1'">
+<div class="qwrap">
+<div class="pdots"><div class="dot" :class="{done:q>0,active:q===0}"></div><div class="dot" :class="{done:q>1,active:q===1}"></div><div class="dot" :class="{done:q>2,active:q===2}"></div><div class="dot" :class="{done:q>3,active:q===3}"></div></div>
+<div class="qnum">问题 一</div>
+<div class="qtext">你希望实现什么目的？</div>
+<div class="qhint">在这一刻，你真正想要的是什么？</div>
+<div class="tarea"><textarea class="tinput" v-model="a[0]" placeholder="轻轻写下你的答案…"></textarea></div>
+<div class="vrow">
+<div class="vbtn" :class="{rec:rec[0]}" @touchstart.prevent="sv(0)" @touchend.prevent="ev(0)" @mousedown="sv(0)" @mouseup="ev(0)" @mouseleave="rec[0]&amp;&amp;ev(0)">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg>
+</div>
+<div class="vhint">{{ rec[0] ? '松手结束录音' : '长按说话' }}</div>
+</div>
+<div class="trans" v-if="tr[0]">{{ tr[0] }}</div>
+<button class="btn2" :class="{on:a[0].trim()}" @click="next(0)">继续</button>
+</div>
+</div>
+<div class="screen" v-if="screen==='q2'">
+<div class="qwrap">
+<div class="pdots"><div class="dot done"></div><div class="dot" :class="{active:q===1}"></div><div class="dot"></div><div class="dot"></div></div>
+<div class="qnum">问题 二</div>
+<div class="qtext">你希望对方实现什么目的？</div>
+<div class="qhint">在对方身上，你真正期待的是什么？</div>
+<div class="tarea"><textarea class="tinput" v-model="a[1]" placeholder="轻轻写下你的答案…"></textarea></div>
+<div class="vrow">
+<div class="vbtn" :class="{rec:rec[1]}" @touchstart.prevent="sv(1)" @touchend.prevent="ev(1)" @mousedown="sv(1)" @mouseup="ev(1)" @mouseleave="rec[1]&amp;&amp;ev(1)">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg>
+</div>
+<div class="vhint">{{ rec[1] ? '松手结束录音' : '长按说话' }}</div>
+</div>
+<div class="trans" v-if="tr[1]">{{ tr[1] }}</div>
+<button class="btn2" :class="{on:a[1].trim()}" @click="next(1)">继续</button>
+</div>
+</div>
+<div class="screen" v-if="screen==='q3'">
+<div class="qwrap">
+<div class="pdots"><div class="dot done"></div><div class="dot done"></div><div class="dot" :class="{active:q===2}"></div><div class="dot"></div></div>
+<div class="qnum">问题 三</div>
+<div class="qtext">你希望你们的关系<br>实现什么目的？</div>
+<div class="qhint">对于这段关系，你希望它走向哪里？</div>
+<div class="tarea"><textarea class="tinput" v-model="a[2]" placeholder="轻轻写下你的答案…"></textarea></div>
+<div class="vrow">
+<div class="vbtn" :class="{rec:rec[2]}" @touchstart.prevent="sv(2)" @touchend.prevent="ev(2)" @mousedown="sv(2)" @mouseup="ev(2)" @mouseleave="rec[2]&amp;&amp;ev(2)">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg>
+</div>
+<div class="vhint">{{ rec[2] ? '松手结束录音' : '长按说话' }}</div>
+</div>
+<div class="trans" v-if="tr[2]">{{ tr[2] }}</div>
+<button class="btn2" :class="{on:a[2].trim()}" @click="next(2)">继续</button>
+</div>
+</div>
+<div class="screen" v-if="screen==='qfinal'">
+<div class="qwrap">
+<div class="pdots"><div class="dot done"></div><div class="dot done"></div><div class="dot done"></div><div class="dot" :class="{active:q===3}"></div></div>
+<div class="qnum">最后的问题</div>
+<div class="qtext" style="font-size:1.3rem">要想实现这些，<br>你需要怎么做？</div>
+<div class="qhint">回到内心，诚实地回答</div>
+<div class="tarea"><textarea class="tinput" v-model="a[3]" placeholder="轻轻写下你的答案…"></textarea></div>
+<div class="vrow">
+<div class="vbtn" :class="{rec:rec[3]}" @touchstart.prevent="sv(3)" @touchend.prevent="ev(3)" @mousedown="sv(3)" @mouseup="ev(3)" @mouseleave="rec[3]&amp;&amp;ev(3)">
+<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg>
+</div>
+<div class="vhint">{{ rec[3] ? '松手结束录音' : '长按说话' }}</div>
+</div>
+<div class="trans" v-if="tr[3]">{{ tr[3] }}</div>
+<button class="btn2" :class="{on:a[3].trim()}" @click="showResult">查看答案</button>
+</div>
+</div>
+<div class="screen" v-if="screen==='result'">
+<div class="ri">
+<div class="rtitle">初心</div>
+<div class="rsub">你的四个答案</div>
+<div class="rcard">
+<div class="ritem"><div class="rlab">问题一</div><div class="rq">你希望实现什么目的？</div><div class="ra">{{ a[0] }}</div></div>
+<hr class="rdiv">
+<div class="ritem"><div class="rlab">问题二</div><div class="rq">你希望对方实现什么目的？</div><div class="ra">{{ a[1] }}</div></div>
+<hr class="rdiv">
+<div class="ritem"><div class="rlab">问题三</div><div class="rq">你希望你们的关系实现什么目的？</div><div class="ra">{{ a[2] }}</div></div>
+<hr class="rdiv">
+<div class="ritem"><div class="rlab">最后的答案</div><div class="rq">要想实现这些，你需要怎么做？</div><div class="ra">{{ a[3] }}</div></div>
+</div>
+<div class="rsum"><div class="slabel">—— 回到初心 ——</div><div class="stext">{{ stext }}</div></div>
+<div class="abtns">
+<button class="sbtn" @click="share"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>生成分享图</button>
+<button class="rbtn" @click="restart">重新开始</button>
+</div>
+</div>
+</div>
+</div>
+<canvas id="c" width="540" height="960"></canvas>
+<div class="toast" :class="{on:ts.on}">{{ ts.txt }}</div>
 <script>
-const { createApp } = Vue;
-
-createApp({
-  data() {
-    return {
-      screen: 'welcome',
-      currentQ: 0,
-      answers: ['', '', '', ''],
-      transcripts: ['', '', '', ''],
-      recording: [false, false, false, false],
-      speechRec: [null, null, null, null],
-      audioBlobs: [null, null, null, null],
-      mediaRec: [null, null, null, null],
-      toast: { show: false, text: '' }
-    };
-  },
-  computed: {
-    summaryText() {
-      const t = this.answers[3];
-      if (!t) return '回到内心，答案就在那里。';
-      return t.length > 36 ? t : '「' + t + '」—— 这是你通往初心的路。';
-    }
-  },
-  methods: {
-    // Toast
-    showToast(text) {
-      this.toast.text = text;
-      this.toast.show = true;
-      setTimeout(() => this.toast.show = false, 2200);
-    },
-
-    // Navigation
-    start() { this.screen = 'q1'; this.currentQ = 0; },
-    next(idx) {
-      if (!this.answers[idx].trim()) return;
-      this.stopVoice(idx);
-      const map = ['q2','q3','qfinal'];
-      this.screen = map[idx];
-      this.currentQ = idx + 1;
-    },
-    showResult() {
-      if (!this.answers[3].trim()) return;
-      this.stopAllVoice();
-      this.screen = 'result';
-      this.currentQ = 4;
-    },
-    restart() {
-      this.answers = ['', '', '', ''];
-      this.transcripts = ['', '', '', ''];
-      this.recording = [false, false, false, false];
-      this.stopAllVoice();
-      this.screen = 'welcome';
-      this.currentQ = 0;
-    },
-    checkDone(idx) {
-      // transcript auto-sync handled in voice
-    },
-
-    // ===== Voice =====
-    startVoice(idx) {
-      if (this.recording[idx]) return;
-      // Stop others
-      this.recording.forEach((_, i) => { if (i !== idx) this.stopVoice(i); });
-
-      // Try Web Speech API
-      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-      if (SR) {
-        const sr = new SR();
-        sr.lang = 'zh-CN';
-        sr.continuous = true;
-        sr.interimResults = true;
-        this.speechRec[idx] = sr;
-        let final = this.transcripts[idx];
-        sr.onresult = (e) => {
-          let interim = '';
-          for (let i = e.resultIndex; i < e.results.length; i++) {
-            const t = e.results[i][0].transcript;
-            if (e.results[i].isFinal) final += t;
-            else interim += t;
-          }
-          this.transcripts[idx] = final + interim;
-          this.answers[idx] = this.transcripts[idx];
-        };
-        sr.onerror = () => { this.recording[idx] = false; };
-        sr.onend = () => { this.recording[idx] = false; };
-        sr.start();
-        this.recording[idx] = true;
-        this.showToast('正在聆听…');
-        return;
-      }
-
-      // Fallback: MediaRecorder
-      navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
-        const mr = new MediaRecorder(stream);
-        this.mediaRec[idx] = { recorder: mr, stream };
-        const chunks = [];
-        mr.ondataavailable = e => chunks.push(e.data);
-        mr.onstop = () => {
-          this.audioBlobs[idx] = new Blob(chunks, { type: 'audio/webm' });
-          stream.getTracks().forEach(t => t.stop());
-          this.showToast('语音已保存');
-        };
-        mr.start();
-        this.recording[idx] = true;
-        this.showToast('正在录音…');
-      }).catch(() => {
-        this.showToast('请允许麦克风权限');
-
-      // Decorative dots
-      ctx.fillStyle = 'rgba(196,132,106,0.12)';
-      const dots = [[70,180],[W-60,300],[90,H-160],[W-90,H-70],[W*0.25,80],[W*0.75,500],[60,420],[W-50,580]];
-      dots.forEach(([dx,dy]) => { ctx.beginPath(); ctx.arc(dx,dy,7,0,Math.PI*2); ctx.fill(); });
-
-      // Title
-      ctx.font = 'bold 52px Noto Serif SC, serif';
-      ctx.fillStyle = '#4A3728';
-      ctx.textAlign = 'center';
-      ctx.fillText('初心', W/2, 115);
-      ctx.font = '14px Noto Sans SC, sans-serif';
-      ctx.fillStyle = '#8B6F5E';
-      ctx.fillText('回到最初的心意', W/2, 150);
-
-      // Divider
-      ctx.strokeStyle = 'rgba(139,111,94,0.18)';
-      ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(W*0.12, 180); ctx.lineTo(W*0.88, 180); ctx.stroke();
-
-      // Q&A
-      const qas = [
-        { q:'你希望实现什么目的？', a:this.answers[0] },
-        { q:'你希望对方实现什么目的？', a:this.answers[1] },
-        { q:'你希望你们的关系实现什么目的？', a:this.answers[2] },
-        { q:'要想实现这些，你需要怎么做？', a:this.answers[3] }
-      ];
-      let y = 225;
-      qas.forEach(({q,a}, i) => {
-        ctx.font = '11px Noto Sans SC, sans-serif';
-        ctx.fillStyle = '#C4846A';
-        ctx.textAlign = 'center';
-        ctx.fillText('— ' + (i+1) + ' —', W/2, y);
-        ctx.font = '14px Noto Sans SC, sans-serif';
-        ctx.fillStyle = '#7A6255';
-        ctx.fillText(q, W/2, y + 22);
-        ctx.font = '500 19px Noto Serif SC, serif';
-        ctx.fillStyle = '#4A3728';
-        this.wrapText(ctx, a || '（未填写）', W/2, y + 55, W*0.74, 32);
-        y += 158;
-      });
-
-      // Summary
-      ctx.fillStyle = 'rgba(196,132,106,0.07)';
-      this.roundRect(ctx, W*0.08, y-5, W*0.84, 72, 18);
-      ctx.fill();
-      ctx.font = '13px Noto Serif SC, serif';
-      ctx.fillStyle = '#8B6F5E';
-      ctx.textAlign = 'center';
-      ctx.fillText('—— 回到初心 ——', W/2, y + 22);
-      const st = this.answers[3] || '回到内心，答案就在那里。';
-      ctx.font = '500 17px Noto Serif SC, serif';
-      ctx.fillStyle = '#4A3728';
-      this.wrapText(ctx, st, W/2, y + 50, W*0.76, 26);
-
-      // Footer
-      ctx.font = '11px Noto Sans SC, sans-serif';
-      ctx.fillStyle = 'rgba(139,111,94,0.35)';
-      ctx.fillText('初心 · 回到最初的心意', W/2, H - 45);
-
-      // Download
-      canvas.toBlob(blob => {
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.download = '初心.png';
-        a.href = url;
-        a.click();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
-        this.showToast('图片已保存到直机');
-      }, 'image/png');
-    },
-
-    // ===== Text wrap =====
-    wrapText(ctx, text, x, y, maxWidth, lineH) {
-      const lines = [], cur = '';
-      for (const ch of text) {
-        const test = cur + ch;
-        if (ctx.measureText(test).width > maxWidth && cur) { lines.push(cur); }
-        lines[lines.length-1] !== undefined ? lines[lines.length-1] += ch : null;
-      }
-      const actual = lines.length ? lines : [text];
-      const totalH = actual.length * lineH;
-      const startY = y - totalH / 2 + lineH / 2;
-      actual.forEach((l, i) => ctx.fillText(l, x, startY + i * lineH));
-    },
-
-    // ===== Rounded rect =====
-    roundRect(ctx, x, y, w, h, r) {
-      ctx.beginPath();
-      ctx.moveTo(x+r,y); ctx.lineTo(x+w-r,y);
-      ctx.quadraticCurveTo(x+w,y,x+w,y+r); ctx.lineTo(x+w,y+h-r);
-      ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h); ctx.lineTo(x+r,y+h);
-      ctx.quadraticCurveTo(x,y+h,x,y+h-r); ctx.lineTo(x,y+r);
-      ctx.quadraticCurveTo(x,y,x+r,y); ctx.closePath();
-    }
-  }
-}).mount('#app');
+var app=Vue.createApp({data:function(){return{screen:'welcome',q:0,a:['','','',''],tr:['','','',''],rec:[false,false,false,false],sr:[null,null,null,null],ab:[null,null,null,null],mr:[null,null,null,null],ts:{on:false,txt:''}}},computed:{stext:function(){var t=this.a[3];return t?t.length>36?t:'\u300c'+t+'\u300d\u2014\u2014 \u8fd9\u662f\u4f60\u901a\u5f80\u521d\u5fc3\u7684\u8def\u3002':'\u56de\u5230\u5185\u5fc3\uff0c\u7b54\u6848\u5c31\u5728\u90a3\u91cc\u3002'}},methods:{toast:function(txt){var self=this;this.ts.txt=txt;this.ts.on=true;setTimeout(function(){self.ts.on=false;},2200);},go:function(s,q){this.screen=s;this.q=q;},next:function(i){if(!this.a[i].trim())return;this.ev(i);var m=['q2','q3','qfinal'];this.screen=m[i];this.q=i+1;},showResult:function(){if(!this.a[3].trim())return;this.sr.forEach(function(_,i){this.ev(i);}.bind(this));this.screen='result';this.q=4;},restart:function(){this.a=['','','',''];this.tr=['','','',''];this.rec=[false,false,false,false];this.sr.forEach(function(_,i){this.ev(i);}.bind(this));this.screen='welcome';this.q=0;},sv:function(i){var self=this;if(this.rec[i])return;for(var j=0;j<this.rec.length;j++){if(j!==i)this.ev(j);}var SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(SR){var s=new SR();s.lang='zh-CN';s.continuous=true;s.interimResults=true;this.sr[i]=s;var ft=this.tr[i]||'';s.onresult=function(e){var it='';for(var k=e.resultIndex;k<e.results.length;k++){var t=e.results[k][0].transcript;if(e.results[k].isFinal)ft+=t;else it+=t;}self.tr[i]=ft+it;self.a[i]=self.tr[i];};s.onerror=function(){self.rec[i]=false;};s.onend=function(){self.rec[i]=false;};s.start();this.rec[i]=true;this.toast('\u6b63\u5728\u804a\u542c\u2026');return;}var that=this;navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){var m=new MediaRecorder(stream);that.mr[i]={recorder:m,stream:stream};var ck=[];m.ondataavailable=function(e){ck.push(e.data);};m.onstop=function(){that.ab[i]=new Blob(ck,{type:'audio/webm'});stream.getTracks().forEach(function(t){t.stop();});that.toast('\u8bed\u97f3\u5df2\u4fdd\u5b58');};m.start();that.rec[i]=true;that.toast('\u6b63\u5728\u5f55\u97f3\u2026');}).catch(function(){that.toast('\u8bf7\u5141\u8bb8\u9ea6\u514b\u98ce\u6743\u9650');});},ev:function(i){if(!this.rec[i])return;var s=this.sr[i];if(s){try{s.stop();}catch(e){}this.sr[i]=null;}var m=this.mr[i];if(m){try{m.recorder.stop();}catch(e){}this.mr[i]=null;}this.rec[i]=false;},wt:function(ctx,text,x,y,mw,lh){var words=text.split('');var line='';var lines=[];for(var i=0;i<words.length;i++){var test=line+words[i];if(ctx.measureText(test).width>mw&&line){lines.push(line);line=words[i];}else{line=test;}}if(line)lines.push(line);var startY=y-((lines.length-1)*lh)/2;for(var j=0;j<lines.length;j++){ctx.fillText(lines[j],x,startY+j*lh);}},rr:function(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();},share:function(){var canvas=document.getElementById('c');var ctx=canvas.getContext('2d');var W=540,H=960;var self=this;var g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#F5E6D3');g.addColorStop(0.5,'#F3DDD6');g.addColorStop(1,'#EDD9C4');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle='rgba(232,196,184,0.18)';ctx.beginPath();ctx.arc(W+100,-100,260,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(196,132,106,0.1)';ctx.beginPath();ctx.arc(-80,H-140,180,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(232,196,184,0.1)';ctx.beginPath();ctx.arc(W*0.8,H*0.9,110,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(196,132,106,0.12)';var ds=[[70,180],[W-60,300],[90,H-160],[W-90,H-70],[W*0.25,80],[W*0.75,500]];for(var di=0;di<ds.length;di++){ctx.beginPath();ctx.arc(ds[di][0],ds[di][1],7,0,Math.PI*2);ctx.fill();}ctx.font='bold 52px "Noto Serif SC",serif';ctx.fillStyle='#4A3728';ctx.textAlign='center';ctx.fillText('\u521d\u5fc3',W/2,115);ctx.font='14px "Noto Sans SC",sans-serif';ctx.fillStyle='#8B6F5E';ctx.fillText('\u56de\u5230\u6700\u521d\u7684\u5fc3\u610f',W/2,150);ctx.strokeStyle='rgba(139,111,94,0.18)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.12,180);ctx.lineTo(W*0.88,180);ctx.stroke();var qas=[{q:'\u4f60\u5e0c\u671b\u5b9e\u73b0\u4ec0\u4e48\u76ee\u7684\uff1f',a:self.a[0]},{q:'\u4f60\u5e0c\u671b\u5bf9\u65b9\u5b9e\u73b0\u4ec0\u4e48\u76ee\u7684\uff1f',a:self.a[1]},{q:'\u4f60\u5e0c\u671b\u4f60\u4eec\u7684\u5173\u7cfb\u5b9e\u73b0\u4ec0\u4e48\u76ee\u7684\uff1f',a:self.a[2]},{q:'\u8981\u60f3\u5b9e\u73b0\u8fd9\u4e9b\uff0c\u4f60\u9700\u8981\u600e\u4e48\u505a\uff1f',a:self.a[3]}];var yy=225;for(var qi=0;qi<qas.length;qi++){ctx.font='11px "Noto Sans SC",sans-serif';ctx.fillStyle='#C4846A';ctx.textAlign='center';ctx.fillText('\u2014 '+(qi+1)+' \u2014',W/2,yy);ctx.font='14px "Noto Sans SC",sans-serif';ctx.fillStyle='#7A6255';ctx.fillText(qas[qi].q,W/2,yy+22);ctx.font='500 19px "Noto Serif SC",serif';ctx.fillStyle='#4A3728';self.wt(ctx,qas[qi].a||'\uff08\u672a\u586b\u5199\uff09',W/2,yy+55,W*0.74,32);yy+=158;}ctx.fillStyle='rgba(196,132,106,0.07)';self.rr(ctx,W*0.08,yy-5,W*0.84,72,18);ctx.fill();ctx.font='13px "Noto Serif SC",serif';ctx.fillStyle='#8B6F5E';ctx.textAlign='center';ctx.fillText('\u2014\u2014 \u56de\u5230\u521d\u5fc3 \u2014\u2014',W/2,yy+22);var st=self.a[3]||'\u56de\u5230\u5185\u5fc3\uff0c\u7b54\u6848\u5c31\u5728\u90a3\u91cc\u3002';ctx.font='500 17px "Noto Serif SC",serif';ctx.fillStyle='#4A3728';self.wt(ctx,st,W/2,yy+50,W*0.76,26);ctx.font='11px "Noto Sans SC",sans-serif';ctx.fillStyle='rgba(139,111,94,0.35)';ctx.textAlign='center';ctx.fillText('\u521d\u5fc3 \u00b7 \u56de\u5230\u6700\u521d\u7684\u5fc3\u610f',W/2,H-45);canvas.toBlob(function(blob){var url=URL.createObjectURL(blob);var a=document.createElement('a');a.download='\u521d\u5fc3.png';a.href=url;a.click();setTimeout(function(){URL.revokeObjectURL(url);},1000);self.toast('\u56fe\u7247\u5df2\u4fdd\u5b58\u5230\u76f4\u673a');},'image/png');}}}).mount('#app');
 </script>
 </body>
 </html>
