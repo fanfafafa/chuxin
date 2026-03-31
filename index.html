@@ -8,16 +8,16 @@
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--cream:#F5E6D3;--pink:#E8C4B8;--warm:#8B6F5E;--text:#4A3728;--light:#7A6255;--accent:#C4846A}
+:root{--warm:#8B6F5E;--text:#4A3728;--light:#7A6255;--accent:#C4846A}
 html,body{height:100%;overflow:hidden}
-body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5E6D3,#F3DDD6,#EDD9C4);color:var(--text);-webkit-tap-highlight-color:transparent}
+body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5E6D3,#F3DDD6,#EDD9C4);color:var(--text);-webkit-tap-highlight-color:transparent;touch-action:none}
+#app{position:relative;z-index:1;height:100dvh;overflow:hidden}
 .bg{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
 .bg>div{position:absolute;border-radius:50%;opacity:0.12}
 .bg>div:nth-child(1){width:320px;height:320px;background:#E8C4B8;top:-100px;right:-100px}
 .bg>div:nth-child(2){width:200px;height:200px;background:#C4846A;bottom:5%;left:-70px}
 .bg>div:nth-child(3){width:140px;height:140px;background:#E8C4B8;bottom:-50px;right:15%}
-#app{position:relative;z-index:1;height:100dvh;overflow:hidden}
-.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 28px}
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px 28px 120px}
 .ptitle{font-family:'Noto Serif SC',serif;font-size:3.5rem;font-weight:600;letter-spacing:14px;margin-bottom:6px;animation:breathe 4s ease infinite}
 @keyframes breathe{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
 .psub{font-family:'Noto Serif SC',serif;font-size:.8rem;color:var(--light);letter-spacing:5px;margin-bottom:44px}
@@ -28,30 +28,40 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 .dot{width:6px;height:6px;border-radius:3px;background:rgba(139,111,94,.2);transition:all .35s}
 .dot.done{background:rgba(139,111,94,.45)}
 .dot.active{background:var(--accent);width:22px;border-radius:3px}
-.qwrap{width:100%;max-width:380px;display:flex;flex-direction:column;align-items:center;flex:1;justify-content:center;padding:16px 0}
+.qwrap{width:100%;max-width:380px;display:flex;flex-direction:column;align-items:center;flex:1;justify-content:center}
 .qnum{font-size:.68rem;color:var(--accent);letter-spacing:3px;margin-bottom:14px}
 .qtext{font-family:'Noto Serif SC',serif;font-size:1.45rem;font-weight:500;text-align:center;line-height:1.8;margin-bottom:8px}
 .qhint{font-size:.78rem;color:var(--light);margin-bottom:28px;font-weight:300}
-.tarea{width:100%;margin-bottom:20px}
+.tarea{width:100%;margin-bottom:16px}
 .tinput{width:100%;background:rgba(255,255,255,.55);border:1.5px solid rgba(196,132,106,.2);border-radius:18px;padding:16px 18px;font-size:1rem;font-family:'Noto Sans SC',sans-serif;color:var(--text);resize:none;outline:none;min-height:110px;max-height:160px;line-height:1.85;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .tinput:focus{border-color:rgba(196,132,106,.45)}
 .tinput::placeholder{color:#b09a8e}
 .tinput::-webkit-scrollbar,.trans::-webkit-scrollbar,.ri::-webkit-scrollbar{display:none}
-.vrow{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:24px}
-.vhint{font-size:.78rem;color:var(--light)}
-.vbtn{width:72px;height:72px;border-radius:50%;border:2.5px solid var(--accent);background:rgba(255,255,255,.45);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;-webkit-user-select:none;user-select:none;position:relative}
-.vbtn svg{width:28px;height:28px;color:var(--accent);transition:color .2s}
-.vbtn.pressing{transform:scale(.95);background:rgba(196,132,106,.15);box-shadow:0 0 0 0 rgba(196,132,106,.4)}
-.vbtn.rec{background:var(--accent);border-color:var(--accent);transform:scale(.95);box-shadow:0 0 0 8px rgba(196,132,106,.2)}
-.vbtn.rec svg{color:#fff}
-.vbtn.rec::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:2px solid var(--accent);animation:vpulse 1.4s ease-out infinite}
-@keyframes vpulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.5);opacity:0}}
-.trans{width:100%;background:rgba(255,255,255,.4);border-radius:12px;padding:12px 16px;font-size:.88rem;min-height:44px;max-height:80px;overflow:hidden;line-height:1.7;margin-bottom:12px;animation:fadein .25s;word-break:break-all}
+.trans{width:100%;background:rgba(255,255,255,.4);border-radius:12px;padding:12px 16px;font-size:.88rem;min-height:44px;max-height:80px;overflow:hidden;line-height:1.7;margin-bottom:8px;animation:fadein .25s;word-break:break-all}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
 .btn2{background:var(--warm);color:#fff;border:none;border-radius:40px;padding:16px 52px;font-family:'Noto Serif SC',serif;letter-spacing:4px;font-size:.95rem;cursor:pointer;box-shadow:0 4px 18px rgba(139,111,94,.22);transition:all .2s;opacity:.4;pointer-events:none}
 .btn2.on{opacity:1;pointer-events:auto}
 .btn2.on:active{transform:scale(.96)}
+.bottom-bar{position:fixed;bottom:0;left:0;right:0;display:flex;align-items:center;justify-content:center;padding:16px 28px;padding-bottom:max(16px,env(safe-area-inset-bottom));background:linear-gradient(to top,rgba(245,230,211,0.98) 60%,transparent);z-index:50}
+.mic-btn{width:64px;height:64px;border-radius:50%;border:none;background:var(--warm);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(139,111,94,.35);transition:transform .15s,background .15s;-webkit-user-select:none;user-select:none}
+.mic-btn:active,.mic-btn.pressing{transform:scale(.9)}
+.mic-btn svg{width:28px;height:28px;color:#fff;pointer-events:none}
+.mic-btn.pressing{background:#C4846A}
+.rec-overlay{position:fixed;inset:0;z-index:300;background:rgba(5,5,10,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(4px);animation:recIn .25s ease}
+@keyframes recIn{from{opacity:0}to{opacity:1}}
+.rec-inner{width:260px;display:flex;flex-direction:column;align-items:center;gap:20px}
+.rec-dot{width:14px;height:14px;border-radius:50%;background:#ff3b30;animation:blink .9s ease infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.rec-time{font-family:'Courier New',monospace;font-size:2.8rem;color:#fff;font-weight:300;letter-spacing:2px}
+.rec-waves{width:220px;height:48px;display:flex;align-items:center;justify-content:center;gap:3px}
+.rec-bar{width:4px;border-radius:2px;background:rgba(255,255,255,.6);transition:height .05s}
+.rec-hint{display:flex;align-items:center;gap:6px}
+.rec-arrow{color:rgba(255,255,255,.35);font-size:1.1rem}
+.rec-hint-text{font-size:.8rem;color:rgba(255,255,255,.3)}
+.rec-tip{font-size:.68rem;color:rgba(255,255,255,.2)}
+.canceling .rec-arrow,.canceling .rec-hint-text{color:#ff3b30}
 .ri{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;width:100%;max-width:380px;padding:8px 0 24px;display:flex;flex-direction:column;align-items:center}
+.ri::-webkit-scrollbar{display:none}
 .rtitle{font-family:'Noto Serif SC',serif;font-size:1.5rem;letter-spacing:6px;margin-bottom:4px}
 .rsub{font-size:.72rem;color:var(--light);letter-spacing:2px;margin-bottom:20px}
 .rcard{width:100%;background:rgba(255,255,255,.5);border-radius:22px;padding:24px 20px;box-shadow:0 4px 24px rgba(139,111,94,.08);margin-bottom:16px}
@@ -70,7 +80,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 .rbtn{background:transparent;color:var(--light);border:1.5px solid rgba(139,111,94,.25);border-radius:40px;padding:14px 0;font-family:'Noto Serif SC',serif;letter-spacing:2px;font-size:.85rem;cursor:pointer;transition:background .2s}
 .rbtn:active{background:rgba(139,111,94,.05)}
 #c{display:none}
-.toast{position:fixed;bottom:60px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(74,55,40,.9);color:#fff;padding:12px 24px;border-radius:24px;font-size:.85rem;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(74,55,40,.9);color:#fff;padding:12px 24px;border-radius:24px;font-size:.85rem;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
 </head>
@@ -90,15 +100,10 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 <div class="qtext">你希望实现什么目的？</div>
 <div class="qhint">在这一刻，你真正想要的是什么？</div>
 <div class="tarea"><textarea class="tinput" v-model="a[0]" placeholder="轻轻写下你的答案…"></textarea></div>
-<div class="vrow">
-<div class="vbtn" :class="{pressing:pressing[0],rec:rec[0]}" @touchstart.prevent="pd(0)" @touchend.prevent="pu(0)" @mousedown="pd(0)" @mouseup="pu(0)" @mouseleave="rec[0]&amp;&amp;pu(0)">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg>
-</div>
-<div class="vhint">{{ rec[0] ? '松手结束录音' : '长按说话' }}</div>
-</div>
 <div class="trans" v-if="tr[0]">{{ tr[0] }}</div>
 <button class="btn2" :class="{on:a[0].trim()}" @click="next(0)">继续</button>
 </div>
+<div class="bottom-bar"><div class="mic-btn" :class="{pressing:rec.pressing}" @touchstart.prevent="recStart(0,$event)" @touchend.prevent="recEnd($event)" @mousedown="recStart(0,$event)" @mouseup="recEnd($event)" @mouseleave="recEnd($event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg></div></div>
 </div>
 <div class="screen" v-if="screen==='q2'">
 <div class="qwrap">
@@ -107,15 +112,10 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 <div class="qtext">你希望对方实现什么目的？</div>
 <div class="qhint">在对方身上，你真正期待的是什么？</div>
 <div class="tarea"><textarea class="tinput" v-model="a[1]" placeholder="轻轻写下你的答案…"></textarea></div>
-<div class="vrow">
-<div class="vbtn" :class="{pressing:pressing[1],rec:rec[1]}" @touchstart.prevent="pd(1)" @touchend.prevent="pu(1)" @mousedown="pd(1)" @mouseup="pu(1)" @mouseleave="rec[1]&amp;&amp;pu(1)">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg>
-</div>
-<div class="vhint">{{ rec[1] ? '松手结束录音' : '长按说话' }}</div>
-</div>
 <div class="trans" v-if="tr[1]">{{ tr[1] }}</div>
 <button class="btn2" :class="{on:a[1].trim()}" @click="next(1)">继续</button>
 </div>
+<div class="bottom-bar"><div class="mic-btn" :class="{pressing:rec.pressing}" @touchstart.prevent="recStart(1,$event)" @touchend.prevent="recEnd($event)" @mousedown="recStart(1,$event)" @mouseup="recEnd($event)" @mouseleave="recEnd($event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg></div></div>
 </div>
 <div class="screen" v-if="screen==='q3'">
 <div class="qwrap">
@@ -124,15 +124,10 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 <div class="qtext">你希望你们的关系<br>实现什么目的？</div>
 <div class="qhint">对于这段关系，你希望它走向哪里？</div>
 <div class="tarea"><textarea class="tinput" v-model="a[2]" placeholder="轻轻写下你的答案…"></textarea></div>
-<div class="vrow">
-<div class="vbtn" :class="{pressing:pressing[2],rec:rec[2]}" @touchstart.prevent="pd(2)" @touchend.prevent="pu(2)" @mousedown="pd(2)" @mouseup="pu(2)" @mouseleave="rec[2]&amp;&amp;pu(2)">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg>
-</div>
-<div class="vhint">{{ rec[2] ? '松手结束录音' : '长按说话' }}</div>
-</div>
 <div class="trans" v-if="tr[2]">{{ tr[2] }}</div>
 <button class="btn2" :class="{on:a[2].trim()}" @click="next(2)">继续</button>
 </div>
+<div class="bottom-bar"><div class="mic-btn" :class="{pressing:rec.pressing}" @touchstart.prevent="recStart(2,$event)" @touchend.prevent="recEnd($event)" @mousedown="recStart(2,$event)" @mouseup="recEnd($event)" @mouseleave="recEnd($event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg></div></div>
 </div>
 <div class="screen" v-if="screen==='qfinal'">
 <div class="qwrap">
@@ -141,15 +136,10 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 <div class="qtext" style="font-size:1.3rem">要想实现这些，<br>你需要怎么做？</div>
 <div class="qhint">回到内心，诚实地回答</div>
 <div class="tarea"><textarea class="tinput" v-model="a[3]" placeholder="轻轻写下你的答案…"></textarea></div>
-<div class="vrow">
-<div class="vbtn" :class="{pressing:pressing[3],rec:rec[3]}" @touchstart.prevent="pd(3)" @touchend.prevent="pu(3)" @mousedown="pd(3)" @mouseup="pu(3)" @mouseleave="rec[3]&amp;&amp;pu(3)">
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg>
-</div>
-<div class="vhint">{{ rec[3] ? '松手结束录音' : '长按说话' }}</div>
-</div>
 <div class="trans" v-if="tr[3]">{{ tr[3] }}</div>
 <button class="btn2" :class="{on:a[3].trim()}" @click="showResult">查看答案</button>
 </div>
+<div class="bottom-bar"><div class="mic-btn" :class="{pressing:rec.pressing}" @touchstart.prevent="recStart(3,$event)" @touchend.prevent="recEnd($event)" @mousedown="recStart(3,$event)" @mouseup="recEnd($event)" @mouseleave="recEnd($event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg></div></div>
 </div>
 <div class="screen" v-if="screen==='result'">
 <div class="ri">
@@ -172,10 +162,18 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 </div>
 </div>
 </div>
+<div class="rec-overlay" v-if="rec.show" :class="{canceling:rec.canceling}">
+<div class="rec-inner">
+<div class="rec-dot"></div>
+<div class="rec-time">{{ rec.timeStr }}</div>
+<div class="rec-waves"><div class="rec-bar" v-for="(h,i) in rec.bars" :key="i" :style="{height:h+'px'}"></div></div>
+<div class="rec-hint"><span class="rec-arrow">&#8592;</span><span class="rec-hint-text">{{ rec.canceling ? '松开取消' : '左滑取消' }}</span></div>
+<div class="rec-tip">持续按住说话</div>
+</div>
+</div>
+</div>
 <canvas id="c" width="540" height="960"></canvas>
 <div class="toast" :class="{on:ts.on}">{{ ts.txt }}</div>
-<script>
-var app=Vue.createApp({data:function(){return{screen:'welcome',q:0,a:['','','',''],tr:['','','',''],rec:[false,false,false,false],pressing:[false,false,false,false],holdTimers:[null,null,null,null],sr:[null,null,null,null],ab:[null,null,null,null],mr:[null,null,null,null],ts:{on:false,txt:''}}},computed:{stext:function(){var t=this.a[3];return t?t.length>36?t:'\u300c'+t+'\u300d\u2014\u2014 \u8fd9\u662f\u4f60\u901a\u5f80\u521d\u5fc3\u7684\u8def\u3002':'\u56de\u5230\u5185\u5fc3\uff0c\u7b54\u6848\u5c31\u5728\u90a3\u91cc\u3002'}},methods:{toast:function(txt){var self=this;this.ts.txt=txt;this.ts.on=true;setTimeout(function(){self.ts.on=false;},2200);},go:function(s,q){this.screen=s;this.q=q;},next:function(i){if(!this.a[i].trim())return;this.ev(i);var m=['q2','q3','qfinal'];this.screen=m[i];this.q=i+1;},showResult:function(){if(!this.a[3].trim())return;this.sr.forEach(function(_,i){this.ev(i);}.bind(this));this.screen='result';this.q=4;},restart:function(){this.a=['','','',''];this.tr=['','','',''];this.rec=[false,false,false,false];this.sr.forEach(function(_,i){this.ev(i);}.bind(this));this.screen='welcome';this.q=0;},sv:function(i){var self=this;if(this.rec[i])return;for(var j=0;j<this.rec.length;j++){if(j!==i)this.ev(j);}var SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(SR){var s=new SR();s.lang='zh-CN';s.continuous=true;s.interimResults=true;this.sr[i]=s;var ft=this.tr[i]||'';s.onresult=function(e){var it='';for(var k=e.resultIndex;k<e.results.length;k++){var t=e.results[k][0].transcript;if(e.results[k].isFinal)ft+=t;else it+=t;}self.tr[i]=ft+it;self.a[i]=self.tr[i];};s.onerror=function(){self.rec[i]=false;};s.onend=function(){self.rec[i]=false;};s.start();this.rec[i]=true;this.toast('\u6b63\u5728\u804a\u542c\u2026');return;}var that=this;navigator.mediaDevices.getUserMedia({audio:true}).then(function(stream){var m=new MediaRecorder(stream);that.mr[i]={recorder:m,stream:stream};var ck=[];m.ondataavailable=function(e){ck.push(e.data);};m.onstop=function(){that.ab[i]=new Blob(ck,{type:'audio/webm'});stream.getTracks().forEach(function(t){t.stop();});that.toast('\u8bed\u97f3\u5df2\u4fdd\u5b58');};m.start();that.rec[i]=true;that.toast('\u6b63\u5728\u5f55\u97f3\u2026');}).catch(function(){that.toast('\u8bf7\u5141\u8bb8\u9ea6\u514b\u98ce\u6743\u9650');});},ev:function(i){if(!this.rec[i])return;var s=this.sr[i];if(s){try{s.stop();}catch(e){}this.sr[i]=null;}var m=this.mr[i];if(m){try{m.recorder.stop();}catch(e){}this.mr[i]=null;}this.rec[i]=false;},pd:function(i){var self=this;this.pressing[i]=true;this.holdTimers[i]=setTimeout(function(){if(self.pressing[i]){self.pressing[i]=false;self.sv(i);}},300);},pu:function(i){var ht=this.holdTimers[i];if(ht){clearTimeout(ht);this.holdTimers[i]=null;}this.pressing[i]=false;if(this.rec[i])this.ev(i);},wt:function(ctx,text,x,y,mw,lh){var words=text.split('');var line='';var lines=[];for(var i=0;i<words.length;i++){var test=line+words[i];if(ctx.measureText(test).width>mw&&line){lines.push(line);line=words[i];}else{line=test;}}if(line)lines.push(line);var startY=y-((lines.length-1)*lh)/2;for(var j=0;j<lines.length;j++){ctx.fillText(lines[j],x,startY+j*lh);}},rr:function(ctx,x,y,w,h,r){ctx.beginPath();ctx.moveTo(x+r,y);ctx.lineTo(x+w-r,y);ctx.quadraticCurveTo(x+w,y,x+w,y+r);ctx.lineTo(x+w,y+h-r);ctx.quadraticCurveTo(x+w,y+h,x+w-r,y+h);ctx.lineTo(x+r,y+h);ctx.quadraticCurveTo(x,y+h,x,y+h-r);ctx.lineTo(x,y+r);ctx.quadraticCurveTo(x,y,x+r,y);ctx.closePath();},share:function(){var canvas=document.getElementById('c');var ctx=canvas.getContext('2d');var W=540,H=960;var self=this;var g=ctx.createLinearGradient(0,0,W,H);g.addColorStop(0,'#F5E6D3');g.addColorStop(0.5,'#F3DDD6');g.addColorStop(1,'#EDD9C4');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);ctx.fillStyle='rgba(232,196,184,0.18)';ctx.beginPath();ctx.arc(W+100,-100,260,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(196,132,106,0.1)';ctx.beginPath();ctx.arc(-80,H-140,180,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(232,196,184,0.1)';ctx.beginPath();ctx.arc(W*0.8,H*0.9,110,0,Math.PI*2);ctx.fill();ctx.fillStyle='rgba(196,132,106,0.12)';var ds=[[70,180],[W-60,300],[90,H-160],[W-90,H-70],[W*0.25,80],[W*0.75,500]];for(var di=0;di<ds.length;di++){ctx.beginPath();ctx.arc(ds[di][0],ds[di][1],7,0,Math.PI*2);ctx.fill();}ctx.font='bold 52px "Noto Serif SC",serif';ctx.fillStyle='#4A3728';ctx.textAlign='center';ctx.fillText('\u521d\u5fc3',W/2,115);ctx.font='14px "Noto Sans SC",sans-serif';ctx.fillStyle='#8B6F5E';ctx.fillText('\u56de\u5230\u6700\u521d\u7684\u5fc3\u610f',W/2,150);ctx.strokeStyle='rgba(139,111,94,0.18)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(W*0.12,180);ctx.lineTo(W*0.88,180);ctx.stroke();var qas=[{q:'\u4f60\u5e0c\u671b\u5b9e\u73b0\u4ec0\u4e48\u76ee\u7684\uff1f',a:self.a[0]},{q:'\u4f60\u5e0c\u671b\u5bf9\u65b9\u5b9e\u73b0\u4ec0\u4e48\u76ee\u7684\uff1f',a:self.a[1]},{q:'\u4f60\u5e0c\u671b\u4f60\u4eec\u7684\u5173\u7cfb\u5b9e\u73b0\u4ec0\u4e48\u76ee\u7684\uff1f',a:self.a[2]},{q:'\u8981\u60f3\u5b9e\u73b0\u8fd9\u4e9b\uff0c\u4f60\u9700\u8981\u600e\u4e48\u505a\uff1f',a:self.a[3]}];var yy=225;for(var qi=0;qi<qas.length;qi++){ctx.font='11px "Noto Sans SC",sans-serif';ctx.fillStyle='#C4846A';ctx.textAlign='center';ctx.fillText('\u2014 '+(qi+1)+' \u2014',W/2,yy);ctx.font='14px "Noto Sans SC",sans-serif';ctx.fillStyle='#7A6255';ctx.fillText(qas[qi].q,W/2,yy+22);ctx.font='500 19px "Noto Serif SC",serif';ctx.fillStyle='#4A3728';self.wt(ctx,qas[qi].a||'\uff08\u672a\u586b\u5199\uff09',W/2,yy+55,W*0.74,32);yy+=158;}ctx.fillStyle='rgba(196,132,106,0.07)';self.rr(ctx,W*0.08,yy-5,W*0.84,72,18);ctx.fill();ctx.font='13px "Noto Serif SC",serif';ctx.fillStyle='#8B6F5E';ctx.textAlign='center';ctx.fillText('\u2014\u2014 \u56de\u5230\u521d\u5fc3 \u2014\u2014',W/2,yy+22);var st=self.a[3]||'\u56de\u5230\u5185\u5fc3\uff0c\u7b54\u6848\u5c31\u5728\u90a3\u91cc\u3002';ctx.font='500 17px "Noto Serif SC",serif';ctx.fillStyle='#4A3728';self.wt(ctx,st,W/2,yy+50,W*0.76,26);ctx.font='11px "Noto Sans SC",sans-serif';ctx.fillStyle='rgba(139,111,94,0.35)';ctx.textAlign='center';ctx.fillText('\u521d\u5fc3 \u00b7 \u56de\u5230\u6700\u521d\u7684\u5fc3\u610f',W/2,H-45);canvas.toBlob(function(blob){var url=URL.createObjectURL(blob);var a=document.createElement('a');a.download='\u521d\u5fc3.png';a.href=url;a.click();setTimeout(function(){URL.revokeObjectURL(url);},1000);self.toast('\u56fe\u7247\u5df2\u4fdd\u5b58\u5230\u76f4\u673a');},'image/png');}}}).mount('#app');
-</script>
+<script src="app.js"></script>
 </body>
 </html>
