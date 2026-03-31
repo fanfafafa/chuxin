@@ -55,13 +55,14 @@
     .screen {
       position: absolute;
       inset: 0;
-      display: flex;
+      display: none;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: env(safe-area-inset-top, 20px) 28px env(safe-area-inset-bottom, 20px);
       overflow: hidden;
     }
+    .screen.active { display: flex; }
 
     /* Slide transitions */
     .screen-enter-active { transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); }
