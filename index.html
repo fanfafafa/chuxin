@@ -46,7 +46,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 .mic-btn{width:64px;height:64px;border-radius:50%;border:none;background:var(--warm);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 20px rgba(139,111,94,.35);transition:transform .15s,background .15s;-webkit-user-select:none;user-select:none}
 .mic-btn:active,.mic-btn.pressing{transform:scale(.9)}
 .mic-btn svg{width:28px;height:28px;color:#fff;pointer-events:none}
-.mic-btn.pressing{background:#C4846A}
+.mic-btn.active{background:#C4846A;box-shadow:0 0 0 8px rgba(196,132,106,.2);animation:recpulse 1.2s ease infinite} @keyframes recpulse{0%,100%{box-shadow:0 0 0 0 rgba(196,132,106,.4)}50%{box-shadow:0 0 0 12px rgba(196,132,106,0)}} .rec-actions{display:flex;gap:16px;margin-top:4px} .rec-done-btn{background:var(--accent);color:#fff;border:none;border-radius:24px;padding:12px 28px;font-size:.9rem;cursor:pointer;font-family:inherit} .rec-cancel-btn{background:transparent;color:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.2);border-radius:24px;padding:12px 20px;font-size:.9rem;cursor:pointer;font-family:inherit}
 .rec-overlay{position:fixed;inset:0;z-index:300;background:rgba(5,5,10,.88);display:flex;flex-direction:column;align-items:center;justify-content:center;backdrop-filter:blur(4px);animation:recIn .25s ease}
 @keyframes recIn{from{opacity:0}to{opacity:1}}
 .rec-inner{width:260px;display:flex;flex-direction:column;align-items:center;gap:20px}
@@ -103,7 +103,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 <div class="trans" v-if="tr[0]">{{ tr[0] }}</div>
 <button class="btn2" :class="{on:a[0].trim()}" @click="next(0)">继续</button>
 </div>
-<div class="bottom-bar"><div class="mic-btn" :class="{pressing:rec.pressing}" @touchstart.prevent="recStart(0,$event)" @touchend.prevent="recEnd($event)" @mousedown="recStart(0,$event)" @mouseup="recEnd($event)" @mouseleave="recEnd($event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg></div></div>
+<div class="bottom-bar"><div class="mic-btn" :class="{active:rec.recording}" @click="recToggle(0)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg></div></div>
 </div>
 <div class="screen" v-if="screen==='q2'">
 <div class="qwrap">
@@ -115,7 +115,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 <div class="trans" v-if="tr[1]">{{ tr[1] }}</div>
 <button class="btn2" :class="{on:a[1].trim()}" @click="next(1)">继续</button>
 </div>
-<div class="bottom-bar"><div class="mic-btn" :class="{pressing:rec.pressing}" @touchstart.prevent="recStart(1,$event)" @touchend.prevent="recEnd($event)" @mousedown="recStart(1,$event)" @mouseup="recEnd($event)" @mouseleave="recEnd($event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg></div></div>
+<div class="bottom-bar"><div class="mic-btn" :class="{active:rec.recording}" @click="recToggle(1)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg></div></div>
 </div>
 <div class="screen" v-if="screen==='q3'">
 <div class="qwrap">
@@ -127,7 +127,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 <div class="trans" v-if="tr[2]">{{ tr[2] }}</div>
 <button class="btn2" :class="{on:a[2].trim()}" @click="next(2)">继续</button>
 </div>
-<div class="bottom-bar"><div class="mic-btn" :class="{pressing:rec.pressing}" @touchstart.prevent="recStart(2,$event)" @touchend.prevent="recEnd($event)" @mousedown="recStart(2,$event)" @mouseup="recEnd($event)" @mouseleave="recEnd($event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg></div></div>
+<div class="bottom-bar"><div class="mic-btn" :class="{active:rec.recording}" @click="recToggle(2)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg></div></div>
 </div>
 <div class="screen" v-if="screen==='qfinal'">
 <div class="qwrap">
@@ -139,7 +139,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 <div class="trans" v-if="tr[3]">{{ tr[3] }}</div>
 <button class="btn2" :class="{on:a[3].trim()}" @click="showResult">查看答案</button>
 </div>
-<div class="bottom-bar"><div class="mic-btn" :class="{pressing:rec.pressing}" @touchstart.prevent="recStart(3,$event)" @touchend.prevent="recEnd($event)" @mousedown="recStart(3,$event)" @mouseup="recEnd($event)" @mouseleave="recEnd($event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg></div></div>
+<div class="bottom-bar"><div class="mic-btn" :class="{active:rec.recording}" @click="recToggle(3)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 1a4 4 0 0 1 4 4v6a4 4 0 0 1-8 0V5a4 4 0 0 1 4-4z"/><path d="M19 11a7 7 0 0 1-14 0H3a9 9 0 0 1 18 0z" stroke-linecap="round"/></svg></div></div>
 </div>
 <div class="screen" v-if="screen==='result'">
 <div class="ri">
@@ -166,8 +166,7 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 <div class="rec-dot"></div>
 <div class="rec-time">{{ rec.timeStr }}</div>
 <div class="rec-waves"><div class="rec-bar" v-for="(h,i) in rec.bars" :key="i" :style="{height:h+'px'}"></div></div>
-<div class="rec-hint"><span class="rec-arrow">&#8592;</span><span class="rec-hint-text">{{ rec.canceling ? '松开取消' : '左滑取消' }}</span></div>
-<div class="rec-tip">持续按住说话</div>
+<div class="rec-actions"><button class="rec-done-btn" @click="recToggle(rec.idx)">完成录音</button><button class="rec-cancel-btn" @click="recCancel()">取消</button></div>
 </div>
 </div>
 </div>
