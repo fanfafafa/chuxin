@@ -82,12 +82,58 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 #c{display:none}
 .toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%) translateY(10px);background:rgba(74,55,40,.9);color:#fff;padding:12px 24px;border-radius:24px;font-size:.85rem;opacity:0;transition:all .3s;pointer-events:none;z-index:999;white-space:nowrap}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+/* 历史入口按钮 */
+.hist-btn{position:absolute;top:max(18px,env(safe-area-inset-top));right:20px;background:rgba(139,111,94,.12);border:1px solid rgba(139,111,94,.2);border-radius:20px;padding:8px 16px;font-size:.75rem;color:var(--light);cursor:pointer;letter-spacing:1px;display:flex;align-items:center;gap:5px;transition:background .2s}
+.hist-btn:active{background:rgba(139,111,94,.22)}
+.hist-badge{background:var(--accent);color:#fff;border-radius:10px;padding:1px 6px;font-size:.65rem;min-width:16px;text-align:center}
+/* 历史列表页 */
+.hscreen{position:absolute;inset:0;display:flex;flex-direction:column;background:linear-gradient(160deg,#F5E6D3,#F3DDD6,#EDD9C4)}
+.hhead{display:flex;align-items:center;justify-content:space-between;padding:max(20px,env(safe-area-inset-top)) 20px 14px;flex-shrink:0}
+.hback{background:rgba(139,111,94,.12);border:1px solid rgba(139,111,94,.2);border-radius:20px;padding:8px 16px;font-size:.8rem;color:var(--light);cursor:pointer}
+.hback:active{background:rgba(139,111,94,.22)}
+.htitle{font-family:'Noto Serif SC',serif;font-size:1.1rem;letter-spacing:4px;color:var(--text)}
+.hcount{font-size:.72rem;color:var(--light)}
+.hlist{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 16px 32px}
+.hlist::-webkit-scrollbar{display:none}
+.hempty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;color:var(--light);font-size:.88rem;opacity:.6}
+.hempty-icon{font-size:2.5rem}
+.hcard{background:rgba(255,255,255,.5);border-radius:18px;padding:16px 18px;margin-bottom:12px;cursor:pointer;transition:transform .15s;box-shadow:0 2px 12px rgba(139,111,94,.06)}
+.hcard:active{transform:scale(.98)}
+.hcard-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.hcard-date{font-size:.7rem;color:var(--accent);letter-spacing:1px}
+.hcard-arrow{color:rgba(139,111,94,.35)}
+.hcard-scene{font-size:.82rem;color:var(--light);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hcard-ans{font-family:'Noto Serif SC',serif;font-size:.9rem;color:var(--text);margin-top:6px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+/* 历史详情页 */
+.hdetail{position:absolute;inset:0;background:linear-gradient(160deg,#F5E6D3,#F3DDD6,#EDD9C4);display:flex;flex-direction:column;animation:slidein .25s ease}
+@keyframes slidein{from{transform:translateX(100%)}to{transform:translateX(0)}}
+.dhead{display:flex;align-items:center;justify-content:space-between;padding:max(20px,env(safe-area-inset-top)) 20px 14px;flex-shrink:0}
+.dback{background:rgba(139,111,94,.12);border:1px solid rgba(139,111,94,.2);border-radius:20px;padding:8px 16px;font-size:.8rem;color:var(--light);cursor:pointer}
+.dback:active{background:rgba(139,111,94,.22)}
+.ddel{background:rgba(196,132,106,.1);border:1px solid rgba(196,132,106,.2);border-radius:20px;padding:8px 14px;font-size:.75rem;color:var(--accent);cursor:pointer}
+.ddel:active{background:rgba(196,132,106,.2)}
+.dbody{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 16px 32px}
+.dbody::-webkit-scrollbar{display:none}
+.ddate{text-align:center;font-size:.7rem;color:var(--accent);letter-spacing:2px;margin-bottom:16px}
+.dscene{background:rgba(196,132,106,.08);border-radius:14px;padding:14px 16px;margin-bottom:16px;border:1px solid rgba(196,132,106,.12)}
+.dscene-label{font-size:.62rem;color:var(--accent);letter-spacing:2px;margin-bottom:6px}
+.dscene-txt{font-size:.85rem;color:var(--light);line-height:1.8;font-family:'Noto Serif SC',serif}
+.dcard{background:rgba(255,255,255,.5);border-radius:18px;padding:20px 18px;box-shadow:0 2px 12px rgba(139,111,94,.06)}
+.ditem{margin-bottom:18px}
+.ditem:last-child{margin-bottom:0}
+.dlab{font-size:.62rem;color:var(--accent);letter-spacing:2px;margin-bottom:4px}
+.dq{font-size:.75rem;color:var(--light);margin-bottom:5px}
+.da{font-family:'Noto Serif SC',serif;font-size:.95rem;line-height:1.85;color:var(--text)}
+.ddiv{border:none;border-top:1px solid rgba(139,111,94,.1);margin:16px 0}
 </style>
 </head>
 <body>
 <div class="bg"><div></div><div></div><div></div></div>
 <div id="app">
 <div class="screen" v-if="screen==='welcome'">
+<button class="hist-btn" @click="openHistory">
+  <span>历史</span><span class="hist-badge" v-if="history.length">{{ history.length }}</span>
+</button>
 <div class="ptitle">初心</div>
 <div class="psub">回到最初的心意</div>
 <div class="pdesc">在争吵之后，在愤怒消退之后，<br>轻轻地问自己三个问题。<br>答案会带你回到，<br>最初的那份在乎。</div>
@@ -167,6 +213,82 @@ body{font-family:'Noto Sans SC',sans-serif;background:linear-gradient(160deg,#F5
 <div class="rec-time">{{ rec.timeStr }}</div>
 <div class="rec-waves"><div class="rec-bar" v-for="(h,i) in rec.bars" :key="i" :style="{height:h+'px'}"></div></div>
 <div class="rec-actions"><button class="rec-done-btn" @click="recToggle(rec.idx)">完成录音</button><button class="rec-cancel-btn" @click="recCancel()">取消</button></div>
+</div>
+</div>
+
+<!-- 结果页 -->
+<div class="screen" v-if="screen==='result'" style="padding:20px 20px 32px;justify-content:flex-start;padding-top:max(24px,env(safe-area-inset-top))">
+<div class="ri">
+<div class="rtitle">初心</div>
+<div class="rsub">你的答案</div>
+<div class="rcard">
+<div class="ritem"><div class="rlab">问题一 · 你希望实现什么目的</div><div class="ra">{{ a[0] }}</div></div>
+<div class="rdiv"></div>
+<div class="ritem"><div class="rlab">问题二 · 你希望对方实现什么目的</div><div class="ra">{{ a[1] }}</div></div>
+<div class="rdiv"></div>
+<div class="ritem"><div class="rlab">问题三 · 你希望关系实现什么目的</div><div class="ra">{{ a[2] }}</div></div>
+<div class="rdiv"></div>
+<div class="ritem"><div class="rlab">最后 · 你需要怎么做</div><div class="ra">{{ a[3] }}</div></div>
+</div>
+<div class="rsum" style="margin-top:16px"><div class="slabel">回到初心</div><div class="stext">{{ stext }}</div></div>
+<div class="abtns">
+<button class="sbtn" @click="share">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+保存图片
+</button>
+<button class="sbtn" style="background:rgba(139,111,94,.15);color:var(--warm);box-shadow:none;" @click="openHistory">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+历史记录
+</button>
+<button class="rbtn" @click="restart">重新开始</button>
+</div>
+</div>
+</div>
+
+<!-- 历史列表页 -->
+<div class="hscreen" v-if="screen==='history'">
+<div class="hhead">
+<button class="hback" @click="backFromHistory">← 返回</button>
+<div class="htitle">历史记录</div>
+<div class="hcount">共 {{ history.length }} 条</div>
+</div>
+<div class="hlist">
+<div class="hempty" v-if="history.length===0">
+<div class="hempty-icon">🕊️</div>
+<div>还没有记录</div>
+<div style="font-size:.75rem;opacity:.7">完成一次探索后会自动保存</div>
+</div>
+<div class="hcard" v-for="item in history" :key="item.id" @click="openDetail(item)">
+<div class="hcard-top">
+<div class="hcard-date">{{ item.date }} {{ item.time }}</div>
+<div class="hcard-arrow">›</div>
+</div>
+<div class="hcard-scene" v-if="item.scene">{{ item.scene }}</div>
+<div class="hcard-ans">{{ item.a[3] }}</div>
+</div>
+</div>
+<!-- 详情弹层 -->
+<div class="hdetail" v-if="historyDetail">
+<div class="dhead">
+<button class="dback" @click="closeDetail">← 返回</button>
+<button class="ddel" @click="deleteRecord(historyDetail.id)">删除</button>
+</div>
+<div class="dbody">
+<div class="ddate">{{ historyDetail.date }} {{ historyDetail.time }}</div>
+<div class="dscene" v-if="historyDetail.scene">
+<div class="dscene-label">📌 冲突场景</div>
+<div class="dscene-txt">{{ historyDetail.scene }}</div>
+</div>
+<div class="dcard">
+<div class="ditem"><div class="dlab">问题一</div><div class="dq">你希望实现什么目的？</div><div class="da">{{ historyDetail.a[0] }}</div></div>
+<div class="ddiv"></div>
+<div class="ditem"><div class="dlab">问题二</div><div class="dq">你希望对方实现什么目的？</div><div class="da">{{ historyDetail.a[1] }}</div></div>
+<div class="ddiv"></div>
+<div class="ditem"><div class="dlab">问题三</div><div class="dq">你希望你们的关系实现什么目的？</div><div class="da">{{ historyDetail.a[2] }}</div></div>
+<div class="ddiv"></div>
+<div class="ditem"><div class="dlab">最后</div><div class="dq">要想实现这些，你需要怎么做？</div><div class="da">{{ historyDetail.a[3] }}</div></div>
+</div>
+</div>
 </div>
 </div>
 </div>

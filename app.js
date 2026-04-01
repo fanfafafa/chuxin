@@ -1,3 +1,5 @@
+var STORAGE_KEY = 'chuxin_history';
+
 var app = Vue.createApp({
   data: function() {
     return {
@@ -21,7 +23,9 @@ var app = Vue.createApp({
         bars: Array(28).fill(4),
         animFrame: null,
         idx: -1
-      }
+      },
+      history: [],
+      historyDetail: null
     };
   },
 
@@ -31,6 +35,10 @@ var app = Vue.createApp({
       if (!t) return '\u56de\u5230\u5185\u5fc3\uff0c\u7b54\u6848\u5c31\u5728\u90a3\u91cc\u3002';
       return t.length > 36 ? t : '\u300c' + t + '\u300d\u2014\u2014 \u8fd9\u662f\u4f60\u901a\u5f80\u521d\u5fc3\u7684\u8def\u3002';
     }
+  },
+
+  mounted: function() {
+    this.loadHistory();
   },
 
   methods: {
@@ -52,6 +60,7 @@ var app = Vue.createApp({
 
     showResult: function() {
       if (!this.a[3].trim()) return;
+      this.saveRecord();
       this.screen = 'result';
       this.q = 4;
     },
@@ -63,6 +72,61 @@ var app = Vue.createApp({
       this.screen = 'welcome';
       this.q = 0;
       this._cleanup();
+    },
+
+    // ---- 历史记录 ----
+    loadHistory: function() {
+      try {
+        var raw = localStorage.getItem(STORAGE_KEY);
+        this.history = raw ? JSON.parse(raw) : [];
+      } catch(e) {
+        this.history = [];
+      }
+    },
+
+    saveRecord: function() {
+      var now = new Date();
+      var pad = function(n){ return String(n).padStart(2,'0'); };
+      var dateStr = now.getFullYear() + '/' + pad(now.getMonth()+1) + '/' + pad(now.getDate());
+      var timeStr = pad(now.getHours()) + ':' + pad(now.getMinutes());
+      var record = {
+        id: now.getTime(),
+        date: dateStr,
+        time: timeStr,
+        scene: this.scene,
+        a: this.a.slice()
+      };
+      this.history.unshift(record);
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.history));
+      } catch(e) {}
+    },
+
+    openHistory: function() {
+      this.historyDetail = null;
+      this.screen = 'history';
+    },
+
+    openDetail: function(item) {
+      this.historyDetail = item;
+    },
+
+    closeDetail: function() {
+      this.historyDetail = null;
+    },
+
+    deleteRecord: function(id) {
+      this.history = this.history.filter(function(r){ return r.id !== id; });
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(this.history));
+      } catch(e) {}
+      this.historyDetail = null;
+      this.toast('已删除');
+    },
+
+    backFromHistory: function() {
+      this.historyDetail = null;
+      this.screen = 'welcome';
     },
 
     fmtTime: function(s) {
@@ -85,7 +149,6 @@ var app = Vue.createApp({
       this.rec.animFrame = requestAnimationFrame(function() { self.updateBars(); });
     },
 
-    // Click to start/stop recording
     recToggle: function(idx) {
       if (this.rec.recording) {
         this._doSend();
@@ -183,7 +246,6 @@ var app = Vue.createApp({
       this.toast('\u8bed\u97f3\u5df2\u5f55\u5230');
     },
 
-    // Share image
     wt: function(ctx, text, x, y, mw, lh) {
       var words = text.split('');
       var line = '';
